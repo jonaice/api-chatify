@@ -1,8 +1,46 @@
 import { Request, Response } from 'express';
 import db from '../config/database';
 
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 export class UsuarioController {
-    
+
+  static async login(req: Request, res: Response) {
+    const { correo, password } = req.body;
+
+    if (!correo || !password) {
+      return res.status(400).json({ mensaje: 'Correo y contraseña son obligatorios.' });
+    }
+
+    try {
+      const result = await db.query('SELECT * FROM usuario WHERE correo = $1', [correo]);
+      if (result.rows.length === 0) {
+        return res.status(401).json({ mensaje: 'Credenciales inválidas.' });
+      }
+
+      const usuario = result.rows[0];
+      const passwordValido = await bcrypt.compare(password, usuario.password);
+
+      if (!passwordValido) {
+        return res.status(401).json({ mensaje: 'Credenciales inválidas.' });
+      }
+
+      const token = jwt.sign(
+        { id: usuario.id },
+        process.env.JWT_SECRET || 'secreto',
+        {
+          expiresIn: '7d', // 7 días
+        }
+      );
+
+      res.json({ token, usuario: { id: usuario.id, nombre: usuario.nombre, correo: usuario.correo } });
+    } catch (error) {
+      console.error('Error en login:', error);
+      res.status(500).json({ mensaje: 'Error interno del servidor.' });
+    }
+  }
+
   static async crearUsuario(req: Request, res: Response) {
     const { nombre, correo, password } = req.body;
     if (!nombre || !correo || !password) {
@@ -18,16 +56,6 @@ export class UsuarioController {
     } catch (error) {
       console.error('Error al crear usuario:', error);
       res.status(500).json({ mensaje: 'Error al crear usuario.' });
-    }
-  }
-
-  static async obtenerUsuarios(_req: Request, res: Response) {
-    try {
-      const result = await db.query('SELECT id, nombre, correo FROM usuario');
-      res.json(result.rows);
-    } catch (error) {
-      console.error('Error al obtener usuarios:', error);
-      res.status(500).json({ mensaje: 'Error al obtener usuarios.' });
     }
   }
 

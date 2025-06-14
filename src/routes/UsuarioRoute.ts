@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import { UsuarioController } from '../controllers/UsuarioController';
+import { verificarToken } from '../middlewares/authMiddleware';
 
 const router = Router();
+router.post('/login', UsuarioController.login);
 
-router.post('/crear/usuario', UsuarioController.crearUsuario);
-router.get('/obtener/usuarios', UsuarioController.obtenerUsuarios);
-router.get('/obtener/usuario/:id', UsuarioController.obtenerUsuarioPorId);
-router.put('/actualizar/usuario/:id', UsuarioController.actualizarUsuario);
-router.delete('/borrar/usuario/:id', UsuarioController.eliminarUsuario); // faltaba la primera "/"
+router.post('/crear', UsuarioController.crearUsuario);
+router.get('/obtenerUno/:id', verificarToken, UsuarioController.obtenerUsuarioPorId);
+router.put('/actualizar/:id', verificarToken, UsuarioController.actualizarUsuario);
+router.delete('/borrarUno/:id', verificarToken, UsuarioController.eliminarUsuario);
 
 export default router;
