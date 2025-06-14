@@ -6,8 +6,9 @@ import dotenv from 'dotenv';
 import http from 'http';
 import db from './config/database';
 
+
 // importa tus rutas aquí cuando las tengas:
-// import userRoutes from './routes/usuario.routes';
+import usuarioRoute from './routes/UsuarioRoute';
 
 dotenv.config();
 
@@ -35,7 +36,9 @@ class Server {
 
   private routes(): void {
     // Aquí defines tus rutas
-    // this.app.use('/api/usuarios', userRoutes);
+
+    this.app.use('/api/usuarios', usuarioRoute);
+    
     this.app.get('/', (_req, res) => {
       res.send('API de aprendizaje de inglés en funcionamiento');
     });
