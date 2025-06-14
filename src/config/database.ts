@@ -12,12 +12,4 @@ const pool = new Pool({
   ssl: true, // o true si usas servicios como Render
 });
 
-pool.on('connect', () => {
-  console.log('Base de datos conectada correctamente');
-});
-
-pool.on('error', (err) => {
-  console.error('Error con la base de datos:', err);
-});
-
 export default pool;
