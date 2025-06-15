@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import db from '../config/database';
-
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { Usuario } from '../models/Usuario';
 
 export class UsuarioController {
 
   static async login(req: Request, res: Response) {
-    const { correo, password } = req.body;
+    const { correo, password } = req.body as Pick<Usuario, 'correo' | 'password'>;
 
     if (!correo || !password) {
       return res.status(400).json({ mensaje: 'Correo y contraseña son obligatorios.' });
@@ -19,7 +19,7 @@ export class UsuarioController {
         return res.status(401).json({ mensaje: 'Credenciales inválidas.' });
       }
 
-      const usuario = result.rows[0];
+      const usuario: Usuario = result.rows[0];
       const passwordValido = await bcrypt.compare(password, usuario.password);
 
       if (!passwordValido) {
@@ -29,12 +29,17 @@ export class UsuarioController {
       const token = jwt.sign(
         { id: usuario.id },
         process.env.JWT_SECRET || 'secreto',
-        {
-          expiresIn: '7d', // 7 días
-        }
+        { expiresIn: '7d' } // 7 días
       );
 
-      res.json({ token, usuario: { id: usuario.id, nombre: usuario.nombre, correo: usuario.correo } });
+      res.json({
+        token,
+        usuario: {
+          id: usuario.id,
+          nombre: usuario.nombre,
+          correo: usuario.correo,
+        }
+      });
     } catch (error) {
       console.error('Error en login:', error);
       res.status(500).json({ mensaje: 'Error interno del servidor.' });
@@ -42,7 +47,8 @@ export class UsuarioController {
   }
 
   static async crearUsuario(req: Request, res: Response) {
-    const { nombre, correo, password } = req.body;
+    const { nombre, correo, password } = req.body as Usuario;
+
     if (!nombre || !correo || !password) {
       return res.status(400).json({ mensaje: 'Faltan datos obligatorios.' });
     }
@@ -70,7 +76,9 @@ export class UsuarioController {
       if (result.rows.length === 0) {
         return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
       }
-      res.json(result.rows[0]);
+
+      const usuario: Usuario = result.rows[0];
+      res.json(usuario);
     } catch (error) {
       console.error('Error al obtener usuario:', error);
       res.status(500).json({ mensaje: 'Error interno del servidor.' });
