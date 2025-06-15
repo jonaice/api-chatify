@@ -77,22 +77,6 @@ export class UsuarioController {
     }
   }
 
-  static async actualizarUsuario(req: Request, res: Response) {
-    const { id } = req.params;
-    const { nombre, correo, password } = req.body;
-
-    try {
-      await db.query(
-        'UPDATE usuario SET nombre = $1, correo = $2, password = $3 WHERE id = $4',
-        [nombre, correo, password, id]
-      );
-      res.json({ mensaje: 'Usuario actualizado correctamente.' });
-    } catch (error) {
-      console.error('Error al actualizar usuario:', error);
-      res.status(500).json({ mensaje: 'Error al actualizar usuario.' });
-    }
-  }
-
   static async eliminarUsuario(req: Request, res: Response) {
     const { id } = req.params;
 
