@@ -33,6 +33,7 @@ export class UsuarioController {
       );
 
       res.json({
+        flag: true,
         token,
         usuario: {
           id: usuario.id,
@@ -58,7 +59,7 @@ export class UsuarioController {
         'INSERT INTO usuario (nombre, correo, password) VALUES ($1, $2, $3)',
         [nombre, correo, password]
       );
-      res.status(201).json({ mensaje: 'Usuario creado correctamente.' });
+      res.status(201).json({flag:true, mensaje: 'Usuario creado correctamente.' });
     } catch (error) {
       console.error('Error al crear usuario:', error);
       res.status(500).json({ mensaje: 'Error al crear usuario.' });
@@ -90,7 +91,7 @@ export class UsuarioController {
 
     try {
       await db.query('DELETE FROM usuario WHERE id = $1', [id]);
-      res.json({ mensaje: 'Usuario eliminado correctamente.' });
+      res.json({flag:true, mensaje: 'Usuario eliminado correctamente.' });
     } catch (error) {
       console.error('Error al eliminar usuario:', error);
       res.status(500).json({ mensaje: 'Error al eliminar usuario.' });
