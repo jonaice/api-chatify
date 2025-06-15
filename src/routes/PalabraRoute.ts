@@ -4,6 +4,7 @@ import { verificarToken } from '../middlewares/authMiddleware';
 
 const router = Router();
 
+router.get('/obtenerTodos', verificarToken, PalabraController.obtenerTodos);
 router.get('/obtenerUno/:id', verificarToken, PalabraController.obtenerPalabraPorId);
 
 export default router;

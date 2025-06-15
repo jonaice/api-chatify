@@ -23,10 +23,25 @@ class PalabraController {
                 if (result.rows.length === 0) {
                     return res.status(404).json({ mensaje: 'Palabra no encontrada.' });
                 }
-                res.json(result.rows[0]);
+                res.status(200).json(result.rows[0]);
             }
             catch (error) {
                 console.error('Error al obtener palabra:', error);
+                res.status(500).json({ mensaje: 'Error interno del servidor.' });
+            }
+        });
+    }
+    static obtenerTodos(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield database_1.default.query('SELECT id, palabra_espanol, palabra_ingles, descripcion_espanol, descripcion_ingles FROM palabra ');
+                if (result.rows.length === 0) {
+                    return res.status(404).json({ mensaje: 'No hay palabras disponibles' });
+                }
+                res.status(200).json(result.rows[0]);
+            }
+            catch (error) {
+                console.error('Error al obtener palabras', error);
                 res.status(500).json({ mensaje: 'Error interno del servidor.' });
             }
         });
