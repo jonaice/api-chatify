@@ -35,7 +35,7 @@ class UsuarioController {
                 }
                 const token = jsonwebtoken_1.default.sign({ id: usuario.id }, process.env.JWT_SECRET || 'secreto', { expiresIn: '7d' } // 7 días
                 );
-                res.json({
+                res.status(200).json({
                     flag: true,
                     token,
                     usuario: {

@@ -32,7 +32,7 @@ export class UsuarioController {
         { expiresIn: '7d' } // 7 días
       );
 
-      res.json({
+      res.status(200).json({
         flag: true,
         token,
         usuario: {
