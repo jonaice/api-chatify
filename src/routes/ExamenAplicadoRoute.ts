@@ -5,6 +5,6 @@ import { ExamenAplicadoController } from '../controllers/ExamenAplicadoControlle
 
 const router = Router();
 
-router.post('/crearRegistro', ExamenAplicadoController.crearRegistro);
+router.post('/crearRegistro', verificarToken, ExamenAplicadoController.crearRegistro);
 
 export default router;

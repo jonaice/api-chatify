@@ -24,6 +24,8 @@ const UsuarioRoute_1 = __importDefault(require("./routes/UsuarioRoute"));
 const PreguntaRoute_1 = __importDefault(require("./routes/PreguntaRoute"));
 const OpcionesPreguntaRoute_1 = __importDefault(require("./routes/OpcionesPreguntaRoute"));
 const ExamenAplicadoRoute_1 = __importDefault(require("./routes/ExamenAplicadoRoute"));
+const ExamenIntento_1 = __importDefault(require("./routes/ExamenIntento"));
+const PalabraRoute_1 = __importDefault(require("./routes/PalabraRoute"));
 dotenv_1.default.config();
 class Server {
     constructor() {
@@ -45,8 +47,10 @@ class Server {
         // Aquí defines tus rutas
         this.app.use('/api/usuarios', UsuarioRoute_1.default);
         this.app.use('/api/preguntas', PreguntaRoute_1.default);
-        this.app.use('/api/opciones', OpcionesPreguntaRoute_1.default); // Asegúrate de que la ruta esté bien definida
-        this.app.use('/api/examenAplicado', ExamenAplicadoRoute_1.default); // Asegúrate de que la ruta esté bien definida
+        this.app.use('/api/opciones', OpcionesPreguntaRoute_1.default);
+        this.app.use('/api/examenAplicado', ExamenAplicadoRoute_1.default);
+        this.app.use('/api/examenIntento', ExamenIntento_1.default);
+        this.app.use('/api/palabras', PalabraRoute_1.default);
         this.app.get('/', (_req, res) => {
             res.send('API de aprendizaje de inglés en funcionamiento');
         });
