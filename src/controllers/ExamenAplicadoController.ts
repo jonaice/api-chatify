@@ -38,8 +38,8 @@ export class ExamenAplicadoController {
       );
 
       res.status(201).json({
-        mensaje: 'Registro de examen guardado',
-        es_correcta: esCorrecta
+        flag: true,
+        mensaje: 'Respuesta de examen guardado',
       });
     } catch (error) {
       console.error('Error al registrar el examen:', error);
