@@ -55,11 +55,23 @@ export class UsuarioController {
     }
 
     try {
+      const result = await db.query(
+        'SELECT id, nombre, correo FROM usuario WHERE correo = $1',
+        [correo]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ flag: false, mensaje: 'Usuario no encontrado.' });
+      }
+    } catch (error) {
+      console.error('Error al buscar usuario', error);
+    }
+
+    try {
       await db.query(
         'INSERT INTO usuario (nombre, correo, password) VALUES ($1, $2, $3)',
         [nombre, correo, password]
       );
-      res.status(201).json({flag:true, mensaje: 'Usuario creado correctamente.' });
+      res.status(201).json({ flag: true, mensaje: 'Usuario creado correctamente.' });
     } catch (error) {
       console.error('Error al crear usuario:', error);
       res.status(500).json({ mensaje: 'Error al crear usuario.' });
@@ -82,7 +94,7 @@ export class UsuarioController {
       res.json(usuario);
     } catch (error) {
       console.error('Error al obtener usuario:', error);
-      res.status(500).json({ mensaje: 'Error interno del servidor.' });
+      res.status(500).json({ flag:false, mensaje: 'Error interno del servidor.' });
     }
   }
 
@@ -91,10 +103,10 @@ export class UsuarioController {
 
     try {
       await db.query('DELETE FROM usuario WHERE id = $1', [id]);
-      res.json({flag:true, mensaje: 'Usuario eliminado correctamente.' });
+      res.json({ flag: true, mensaje: 'Usuario eliminado correctamente.' });
     } catch (error) {
       console.error('Error al eliminar usuario:', error);
-      res.status(500).json({ mensaje: 'Error al eliminar usuario.' });
+      res.status(500).json({ flag:false, mensaje: 'Error al eliminar usuario.' });
     }
   }
 }

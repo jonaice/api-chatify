@@ -58,6 +58,15 @@ class UsuarioController {
                 return res.status(400).json({ mensaje: 'Faltan datos obligatorios.' });
             }
             try {
+                const result = yield database_1.default.query('SELECT id, nombre, correo FROM usuario WHERE correo = $1', [correo]);
+                if (result.rows.length === 0) {
+                    return res.status(404).json({ flag: false, mensaje: 'Usuario no encontrado.' });
+                }
+            }
+            catch (error) {
+                console.error('Error al buscar usuario', error);
+            }
+            try {
                 yield database_1.default.query('INSERT INTO usuario (nombre, correo, password) VALUES ($1, $2, $3)', [nombre, correo, password]);
                 res.status(201).json({ flag: true, mensaje: 'Usuario creado correctamente.' });
             }
@@ -80,7 +89,7 @@ class UsuarioController {
             }
             catch (error) {
                 console.error('Error al obtener usuario:', error);
-                res.status(500).json({ mensaje: 'Error interno del servidor.' });
+                res.status(500).json({ flag: false, mensaje: 'Error interno del servidor.' });
             }
         });
     }
@@ -93,7 +102,7 @@ class UsuarioController {
             }
             catch (error) {
                 console.error('Error al eliminar usuario:', error);
-                res.status(500).json({ mensaje: 'Error al eliminar usuario.' });
+                res.status(500).json({ flag: false, mensaje: 'Error al eliminar usuario.' });
             }
         });
     }
