@@ -38,7 +38,7 @@ class PalabraController {
                 if (result.rows.length === 0) {
                     return res.status(404).json({ mensaje: 'No hay palabras disponibles' });
                 }
-                res.status(200).json(result.rows[0]);
+                res.status(200).json(result.rows);
             }
             catch (error) {
                 console.error('Error al obtener palabras', error);

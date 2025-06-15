@@ -34,7 +34,7 @@ export class PalabraController {
         return res.status(404).json({ mensaje: 'No hay palabras disponibles' });
       }
 
-      res.status(200).json(result.rows[0]);
+      res.status(200).json(result.rows);
     } catch (error) {
       console.error('Error al obtener palabras', error);
       res.status(500).json({ mensaje: 'Error interno del servidor.' });
