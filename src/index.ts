@@ -10,6 +10,7 @@ import db from './config/database';
 // importa tus rutas aquí cuando las tengas:
 import usuarioRoute from './routes/UsuarioRoute';
 import preguntaRoute from './routes/PreguntaRoute';
+import './controllers/OpcionesPreguntaController'; // Asegúrate de importar el controlador para que se registre
 
 
 dotenv.config();
@@ -41,6 +42,7 @@ class Server {
 
     this.app.use('/api/usuarios', usuarioRoute);
     this.app.use('/api/preguntas', preguntaRoute);
+    this.app.use('/api/opciones', require('./routes/OpcionesPreguntaRoute').default); // Asegúrate de que la ruta esté bien definida
 
     
     this.app.get('/', (_req, res) => {
