@@ -4,6 +4,6 @@ import { verificarToken } from '../middlewares/authMiddleware';
 
 const router = Router();
 
-router.get('/obtenerTodos', verificarToken, PreguntaController.obtenerTodasPreguntas);
+router.get('/obtenerTodos', PreguntaController.obtenerTodasPreguntas);
 
 export default router;
