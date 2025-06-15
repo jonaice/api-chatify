@@ -6,6 +6,6 @@ import { OpcionesPreguntaController } from '../controllers/OpcionesPreguntaContr
 
 const router = Router();
 
-router.get('/obtener/porPregunta/:pregunta_id', verificarToken,OpcionesPreguntaController.obtenerOpcionesPorPregunta);
+router.get('/obtener/porPregunta/:pregunta_id', OpcionesPreguntaController.obtenerOpcionesPorPregunta);
 
 export default router;
