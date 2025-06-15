@@ -36,6 +36,7 @@ class UsuarioController {
                 const token = jsonwebtoken_1.default.sign({ id: usuario.id }, process.env.JWT_SECRET || 'secreto', { expiresIn: '7d' } // 7 días
                 );
                 res.json({
+                    flag: true,
                     token,
                     usuario: {
                         id: usuario.id,
@@ -58,7 +59,7 @@ class UsuarioController {
             }
             try {
                 yield database_1.default.query('INSERT INTO usuario (nombre, correo, password) VALUES ($1, $2, $3)', [nombre, correo, password]);
-                res.status(201).json({ mensaje: 'Usuario creado correctamente.' });
+                res.status(201).json({ flag: true, mensaje: 'Usuario creado correctamente.' });
             }
             catch (error) {
                 console.error('Error al crear usuario:', error);
@@ -88,7 +89,7 @@ class UsuarioController {
             const { id } = req.params;
             try {
                 yield database_1.default.query('DELETE FROM usuario WHERE id = $1', [id]);
-                res.json({ mensaje: 'Usuario eliminado correctamente.' });
+                res.json({ flag: true, mensaje: 'Usuario eliminado correctamente.' });
             }
             catch (error) {
                 console.error('Error al eliminar usuario:', error);

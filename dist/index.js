@@ -22,7 +22,8 @@ const database_1 = __importDefault(require("./config/database"));
 // importa tus rutas aquí cuando las tengas:
 const UsuarioRoute_1 = __importDefault(require("./routes/UsuarioRoute"));
 const PreguntaRoute_1 = __importDefault(require("./routes/PreguntaRoute"));
-require("./controllers/OpcionesPreguntaController"); // Asegúrate de importar el controlador para que se registre
+const OpcionesPreguntaRoute_1 = __importDefault(require("./routes/OpcionesPreguntaRoute"));
+const ExamenAplicadoRoute_1 = __importDefault(require("./routes/ExamenAplicadoRoute"));
 dotenv_1.default.config();
 class Server {
     constructor() {
@@ -44,7 +45,8 @@ class Server {
         // Aquí defines tus rutas
         this.app.use('/api/usuarios', UsuarioRoute_1.default);
         this.app.use('/api/preguntas', PreguntaRoute_1.default);
-        this.app.use('/api/opciones', require('./routes/OpcionesPreguntaRoute').default); // Asegúrate de que la ruta esté bien definida
+        this.app.use('/api/opciones', OpcionesPreguntaRoute_1.default); // Asegúrate de que la ruta esté bien definida
+        this.app.use('/api/examenAplicado', ExamenAplicadoRoute_1.default); // Asegúrate de que la ruta esté bien definida
         this.app.get('/', (_req, res) => {
             res.send('API de aprendizaje de inglés en funcionamiento');
         });
