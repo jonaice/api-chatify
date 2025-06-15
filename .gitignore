@@ -11,3 +11,7 @@ yarn-error.log*
 
 # VS Code
 .vscode/
+
+# Producción
+dist/
+build/
