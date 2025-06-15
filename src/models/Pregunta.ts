@@ -1,4 +1,4 @@
 export interface Pregunta {
-  id?: number;
-  enunciado: string;
+    id?: number;
+    enunciado: string;
 }
