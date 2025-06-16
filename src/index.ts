@@ -10,11 +10,11 @@ import db from './config/database';
 // importa tus rutas aquí cuando las tengas:
 import usuarioRoute from './routes/UsuarioRoute';
 import preguntaRoute from './routes/PreguntaRoute';
-import opcionesPreguntaRoute  from './routes/OpcionesPreguntaRoute';
+import opcionesPreguntaRoute from './routes/OpcionesPreguntaRoute';
 import examenAplicadoRoute from './routes/ExamenAplicadoRoute';
 import examenIntentoRoute from './routes/ExamenIntento';
 import PalabraRoute from './routes/PalabraRoute';
-
+import vozRoutes from './routes/VozRoute';
 dotenv.config();
 
 class Server {
@@ -47,8 +47,10 @@ class Server {
     this.app.use('/api/opciones', opcionesPreguntaRoute);
     this.app.use('/api/examenAplicado', examenAplicadoRoute);
     this.app.use('/api/examenIntento', examenIntentoRoute);
-    this.app.use('/api/palabras', PalabraRoute); 
-    
+    this.app.use('/api/palabras', PalabraRoute);
+    this.app.use('/api/voz', vozRoutes);
+
+
     this.app.get('/', (_req, res) => {
       res.send('API de aprendizaje de inglés en funcionamiento');
     });
