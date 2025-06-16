@@ -22,21 +22,25 @@ const client = new assemblyai_1.AssemblyAI({
 class VozController {
     static transcribirAudio(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
-                const archivo = req.file;
-                if (!archivo) {
+                // Verificar que se recibió el archivo
+                const archivo = (_a = req.files) === null || _a === void 0 ? void 0 : _a.audio;
+                if (!archivo || Array.isArray(archivo)) {
                     return res.status(400).json({ mensaje: 'No se envió el archivo de audio.' });
                 }
+                // Ruta temporal del archivo
+                const rutaTemporal = archivo.tempFilePath;
                 // Subir a Cloudinary
-                const uploadResult = yield cloudinary_1.default.uploader.upload(archivo.path, {
+                const uploadResult = yield cloudinary_1.default.uploader.upload(rutaTemporal, {
                     resource_type: 'video', // Cloudinary trata audio como video
                     folder: 'audios',
                 });
                 // Eliminar archivo local después de subir
-                fs_1.default.unlinkSync(archivo.path);
+                fs_1.default.unlinkSync(rutaTemporal);
                 const audioUrl = uploadResult.secure_url;
                 const publicId = uploadResult.public_id;
-                // Transcripción
+                // Transcripción con AssemblyAI
                 const transcript = yield client.transcripts.transcribe({
                     audio: audioUrl,
                     speech_model: 'universal',
@@ -48,7 +52,7 @@ class VozController {
                 return res.status(200).json({ texto: transcript.text });
             }
             catch (error) {
-                console.error('Error:', error);
+                console.error('Error en transcripción:', error);
                 return res.status(500).json({ mensaje: 'Error al procesar el audio' });
             }
         });

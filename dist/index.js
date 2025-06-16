@@ -19,6 +19,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const http_1 = __importDefault(require("http"));
 const database_1 = __importDefault(require("./config/database"));
+const fs_1 = __importDefault(require("fs"));
 // importa tus rutas aquí cuando las tengas:
 const UsuarioRoute_1 = __importDefault(require("./routes/UsuarioRoute"));
 const PreguntaRoute_1 = __importDefault(require("./routes/PreguntaRoute"));
@@ -32,16 +33,25 @@ class Server {
     constructor() {
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '3000';
-        this.middlewares();
         this.routes();
+        this.middlewares();
         this.connectDB();
         this.server = http_1.default.createServer(this.app);
+        const dir = './uploads';
+        if (!fs_1.default.existsSync(dir)) {
+            fs_1.default.mkdirSync(dir);
+        }
     }
     middlewares() {
         this.app.use((0, cors_1.default)()); // CORS habilitado
         this.app.use(express_1.default.json()); // JSON
         this.app.use(express_1.default.urlencoded({ extended: true })); // formularios
-        this.app.use((0, express_fileupload_1.default)()); // soporte para archivos (PDFs, audios, imágenes)
+        this.app.use((0, express_fileupload_1.default)({
+            useTempFiles: true,
+            tempFileDir: './uploads',
+            limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+            abortOnLimit: true,
+        }));
         this.app.use((0, morgan_1.default)('dev')); // logs para desarrollo
     }
     routes() {

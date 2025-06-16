@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import http from 'http';
 import db from './config/database';
-
+import fs from 'fs';
 
 // importa tus rutas aquí cuando las tengas:
 import usuarioRoute from './routes/UsuarioRoute';
@@ -25,17 +25,28 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || '3000';
-    this.middlewares();
     this.routes();
+    this.middlewares();
     this.connectDB();
     this.server = http.createServer(this.app);
+    const dir = './uploads';
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
   }
 
   private middlewares(): void {
     this.app.use(cors()); // CORS habilitado
     this.app.use(express.json()); // JSON
     this.app.use(express.urlencoded({ extended: true })); // formularios
-    this.app.use(fileUpload()); // soporte para archivos (PDFs, audios, imágenes)
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: './uploads',
+        limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+        abortOnLimit: true,
+      })
+    );
     this.app.use(morgan('dev')); // logs para desarrollo
   }
 
