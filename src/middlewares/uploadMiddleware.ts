@@ -1,9 +1,16 @@
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
+
+// Asegurar que la carpeta 'uploads/' exista
+const uploadsDir = 'uploads/';
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
 
 // Almacenamiento en disco temporal
 const storage = multer.diskStorage({
-  destination: 'uploads/', 
+  destination: uploadsDir,
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     cb(null, `${Date.now()}${ext}`);
@@ -19,6 +26,12 @@ const fileFilter = (req: any, file: Express.Multer.File, cb: any) => {
   }
 };
 
-const upload = multer({ storage, fileFilter });
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // ✅ Limita a 10 MB
+  },
+});
 
 export default upload;
