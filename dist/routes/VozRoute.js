@@ -9,6 +9,10 @@ const authMiddleware_1 = require("../middlewares/authMiddleware");
 const uploadMiddleware_1 = __importDefault(require("../middlewares/uploadMiddleware"));
 const router = (0, express_1.Router)();
 // Aplica multer para capturar el archivo con clave 'audio'
-router.post('/transcribir', authMiddleware_1.verificarToken, uploadMiddleware_1.default.single('audio'), // <== esta línea es clave
+router.post('/transcribir', authMiddleware_1.verificarToken, (req, res, next) => {
+    console.log("🧾 Headers:", req.headers);
+    console.log("🧾 Content-Type:", req.headers['content-type']);
+    next();
+}, uploadMiddleware_1.default.single('audio'), // <== esta línea es clave
 VozController_1.VozController.transcribirAudio);
 exports.default = router;

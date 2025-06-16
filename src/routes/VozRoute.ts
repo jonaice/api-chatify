@@ -9,6 +9,11 @@ const router = Router();
 router.post(
   '/transcribir',
   verificarToken,
+   (req, res, next) => {
+    console.log("🧾 Headers:", req.headers);
+    console.log("🧾 Content-Type:", req.headers['content-type']);
+    next();
+  },
   upload.single('audio'), // <== esta línea es clave
   VozController.transcribirAudio
 );
