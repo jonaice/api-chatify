@@ -6,4 +6,5 @@ const authMiddleware_1 = require("../middlewares/authMiddleware");
 const router = (0, express_1.Router)();
 router.get('/obtenerTodos', authMiddleware_1.verificarToken, PalabraController_1.PalabraController.obtenerTodos);
 router.get('/obtenerUno/:id', authMiddleware_1.verificarToken, PalabraController_1.PalabraController.obtenerPalabraPorId);
+router.get('/obtenerSoloQuince', authMiddleware_1.verificarToken, PalabraController_1.PalabraController.obtenerAlgunos);
 exports.default = router;

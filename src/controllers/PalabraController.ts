@@ -40,5 +40,30 @@ export class PalabraController {
       res.status(500).json({ mensaje: 'Error interno del servidor.' });
     }
   }
+  static async obtenerAlgunos(req: Request, res: Response) {
+    try {
+      const result = await db.query(
+        `SELECT 
+        p.id, 
+        p.palabra_espanol, 
+        p.palabra_ingles, 
+        p.descripcion_espanol, 
+        p.descripcion_ingles,
+        a.url_audio_cloudinary
+      FROM palabra p
+      JOIN audio a ON p.id = a.palabra_id
+      WHERE p.id BETWEEN 1 AND 15
+      ORDER BY p.id ASC`
+      );
 
+      if (result.rows.length === 0) {
+        return res.status(404).json({ mensaje: 'No hay palabras disponibles con audio.' });
+      }
+
+      return res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error al obtener palabras con audio', error);
+      return res.status(500).json({ mensaje: 'Error interno del servidor.' });
+    }
+  }
 }
